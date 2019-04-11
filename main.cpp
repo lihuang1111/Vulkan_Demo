@@ -14,6 +14,10 @@
 #include <android/native_window.h>
 #include <system/window.h>
 #include <ui/GraphicBufferMapper.h>
+
+#include "VulkanMain.h"
+#include <android/log.h>
+
 using namespace android;
 
 
@@ -52,22 +56,39 @@ int main(void){
 	int width,height;
 	width = 1920;
 	height = 1080;
-	int size = width * height * 4;
-	unsigned char *data = new unsigned char[size];
-	const char *path = "/data/1920x1080_RGBA8888.bin";
-	getDataiFromFile(path,data,size);
+//	int size = width * height * 4;
+//	unsigned char *data = new unsigned char[size];
+//	const char *path = "/data/1920x1080_RGBA8888.bin";
+//	getDataiFromFile(path,data,size);
 	
     /**************set surface config*****************/
-    SurfaceComposerClient::openGlobalTransaction();
-    surfaceControl->setLayer(0X7FFFFFFF);//set z-pos
-	surfaceControl->setPosition(0, 0);//set xoffset and yoffset
-	surfaceControl->setSize(width, height);//set actW actH
-    SurfaceComposerClient::closeGlobalTransaction();
+    SurfaceComposerClient::Transaction{}.setLayer(surfaceControl, 0x7FFFFFFF)
+		.setSize(surfaceControl, width, height)
+		.setPosition(surfaceControl, 0, 0)
+		.show(surfaceControl);
 
-	surfaceControl->show();
+	//SurfaceComposerClient::openGlobalTransaction();
+    //surfaceControl->setLayer(0X7FFFFFFF);//set z-pos
+	//surfaceControl->setPosition(0, 0);//set xoffset and yoffset
+	//surfaceControl->setSize(width, height);//set actW actH
+    //SurfaceComposerClient::closeGlobalTransaction();
+
+	//surfaceControl->show();
 	
-	sp<Surface> surface = surfaceControl->getSurface();
+	//sp<Surface> surface = surfaceControl->getSurface();
+	sp<ANativeWindow> win = surfaceControl->getSurface();
 
+	InitVulkan(win.get());
+
+	do {
+    	// render if vulkan is ready
+    	if (IsVulkanReady()) {
+      		VulkanDrawFrame();
+    	}
+	} while (true);
+
+	DeleteVulkan();
+/*
     ANativeWindow_Buffer outbuffer;
 
 	//while(1)
@@ -78,7 +99,7 @@ int main(void){
 		usleep(100000);
 
 	}
-
+*/
 	
 	printf("[%s][%d]\n",__FILE__,__LINE__);
 	

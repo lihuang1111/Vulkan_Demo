@@ -20,7 +20,9 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:= \
-	main.cpp
+	main.cpp \
+	VulkanMain.cpp \
+	vulkan_wrapper.cpp \
 
 LOCAL_STATIC_LIBRARIES := \
 	libstagefright_color_conversion
@@ -32,12 +34,20 @@ LOCAL_SHARED_LIBRARIES := \
     libui \
     libgui \
 	libstagefright\
-	libstagefright_foundation
+	libstagefright_foundation \
+	libvulkan \
 	
 LOCAL_C_INCLUDES := \
 	frameworks/native/include/media/openmax \
-    frameworks/av/media/libstagefright
+    frameworks/av/media/libstagefright \
+	frameworks/native/vulkan \
+	frameworks/native/libs/nativewindow/include \
+#	external/vulkan-validation-layers/common \
 
+LOCAL_CFLAGS += -Wno-error=unused-parameter
+
+LOCAL_CFLAGS += -DVK_USE_PLATFORM_ANDROID_KHR \
+    			-DVK_NO_PROTOTYPES
 	
 LOCAL_MODULE:= showRGBA
 
