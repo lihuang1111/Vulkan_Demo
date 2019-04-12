@@ -49,7 +49,7 @@ LOCAL_CFLAGS += -Wno-error=unused-parameter
 LOCAL_CFLAGS += -DVK_USE_PLATFORM_ANDROID_KHR \
     			-DVK_NO_PROTOTYPES
 	
-LOCAL_MODULE:= showRGBA
+LOCAL_MODULE:= vulkantest
 
 LOCAL_MODULE_TAGS := tests
 

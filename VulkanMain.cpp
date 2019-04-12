@@ -431,6 +431,7 @@ VkResult loadShaderFromFile(const char* filePath, VkShaderModule* shaderOut,
   size_t fileLength = ftell(file);
   printf("size = %zu \n", fileLength);
   //size_t fileLength = AAsset_getLength(file);
+  fseek(file, 0L, SEEK_SET);
 
   char* fileContent = new char[fileLength];
 
@@ -471,8 +472,8 @@ VkResult CreateGraphicsPipeline(void) {
                                  nullptr, &gfxPipeline.layout_));
 
   VkShaderModule vertexShader, fragmentShader;
-  loadShaderFromFile("data/tri.vert", &vertexShader, VERTEX_SHADER);
-  loadShaderFromFile("data/tri.frag", &fragmentShader, FRAGMENT_SHADER);
+  loadShaderFromFile("/data/tri.vert.spv", &vertexShader, VERTEX_SHADER);
+  loadShaderFromFile("/data/tri.frag.spv", &fragmentShader, FRAGMENT_SHADER);
 
   // Specify vertex and fragment shader stages
   VkPipelineShaderStageCreateInfo shaderStages[2]{
@@ -868,7 +869,7 @@ bool VulkanDrawFrame(void) {
   CALL_VK(
       vkWaitForFences(device.device_, 1, &render.fence_, VK_TRUE, 100000000));
 
-  printf("Drawing frames......");
+  //printf("Drawing frames......");
 
   VkResult result;
   VkPresentInfoKHR presentInfo{
