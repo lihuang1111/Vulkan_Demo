@@ -14,8 +14,6 @@
 
 LOCAL_PATH:= $(call my-dir)
 
-
-
 ############################
 include $(CLEAR_VARS)
 
@@ -48,6 +46,10 @@ LOCAL_CFLAGS += -Wno-error=unused-parameter
 
 LOCAL_CFLAGS += -DVK_USE_PLATFORM_ANDROID_KHR \
     			-DVK_NO_PROTOTYPES
+
+ifeq (1,$(strip $(shell expr $(PLATFORM_VERSION) \>= 9)))
+	      LOCAL_CFLAGS += -DUES_SPHAL_OPEN
+endif
 	
 LOCAL_MODULE:= vulkantest
 
